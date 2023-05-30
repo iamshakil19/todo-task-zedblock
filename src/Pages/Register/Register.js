@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-
+import { Link, Navigate } from "react-router-dom";
+import { useRegistrationMutation } from "../../features/auth/authApi";
+import { toast } from "react-hot-toast";
 const Register = () => {
   const {
     register,
@@ -13,8 +14,19 @@ const Register = () => {
     control,
   } = useForm();
 
+  const [registration, { data, isLoading, error }] = useRegistrationMutation();
+console.log(error, 18);
+  useEffect(() => {
+    if (error?.data?.error?.keyPattern?.email === 1) {
+      toast.error("Email is already in use", { id: "registration" });
+    }
+    if (data?.accessToken && data?.user) {
+      Navigate("/");
+    }
+  }, [data?.accessToken, data?.user, error?.data?.error?.keyPattern?.email]);
+
   const onSubmit = (data) => {
-    console.log(data);
+    registration(data);
   };
 
   return (

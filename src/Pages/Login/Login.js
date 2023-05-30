@@ -1,18 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import { useLoginMutation } from "../../features/auth/authApi";
+import { toast } from "react-hot-toast";
+
 const Login = () => {
   const {
     register,
     formState: { errors },
     handleSubmit,
-    reset,
-    getValues,
-    watch,
   } = useForm();
 
+  const [login, { data, isLoading, isSuccess, error }] = useLoginMutation();
+  useEffect(() => {
+    if (error) {
+      toast.error(error?.data?.error, { id: "login" });
+    }
+    if (data?.accessToken && data?.user) {
+      Navigate("/");
+    }
+  }, [error, data?.accessToken, data?.user]);
+
   const onSubmit = (data) => {
-    console.log(data);
+    login(data);
   };
 
   return (
@@ -22,7 +32,7 @@ const Login = () => {
       </h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="max-w-sm mx-auto mt-10 pb-20">
-        <div>
+          <div>
             <h3 className="poppins text-lg font-semibold mb-2 mt-2">Email</h3>
             <input
               placeholder="Type your email"
@@ -81,7 +91,7 @@ const Login = () => {
             )}
           </div>
           <input
-            // disabled={isLoading}
+            disabled={isLoading}
             className="bg-black text-white mt-5 w-full py-2 text-lg poppins font-semibold cursor-pointer uppercase"
             type="submit"
             value="Login"
