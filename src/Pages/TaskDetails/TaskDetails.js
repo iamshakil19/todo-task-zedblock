@@ -37,6 +37,7 @@ const TaskDetails = () => {
         <div>
           <p className="flex items-center justify-end gap-5 mb-5">
             <MdModeEdit
+              onClick={() => navigate(`/edit-task/${task?.data?._id}`)}
               size={35}
               className="cursor-pointer bg-blue-200 p-1.5 rounded-full hover:bg-blue-500 hover:text-white transition-all duration-200"
             />

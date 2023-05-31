@@ -7,6 +7,7 @@ import PrivateRoute from "../../utils/PrivateRoute";
 import PublicRoute from "../../utils/PublicRoute";
 import AddTask from "../../Pages/AddTask/AddTask";
 import TaskDetails from "../../Pages/TaskDetails/TaskDetails";
+import EditTask from "../../Pages/EditTask/EditTask";
 
 const routes = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const routes = createBrowserRouter([
       {
         path: "/task-details/:id",
         element: <TaskDetails />,
+      },
+      {
+        path: "/edit-task/:id",
+        element: <EditTask />,
       },
     ],
   },
