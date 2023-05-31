@@ -1,14 +1,23 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { userLoggedOut } from "../../../features/auth/authSlice";
-
+import { useDispatch, useSelector } from "react-redux";
+import {
+  handleCompleted,
+  handleTaskSearch,
+} from "../../../features/task/taskSlice";
 const Navbar = () => {
   const dispatch = useDispatch();
-
   const logout = () => {
     dispatch(userLoggedOut());
     localStorage.removeItem("auth");
+  };
+  const navigate = useNavigate();
+  const { searchText, completed } = useSelector((state) => state.task);
+
+  const handleSearch = (e) => {
+    dispatch(handleTaskSearch(e.target.value));
+    navigate("/");
   };
 
   return (
@@ -35,12 +44,9 @@ const Navbar = () => {
             tabIndex={0}
             className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 text-black"
           >
-            <li>
-              <Link to="/add-task">Add Task</Link>
-            </li>
-            <li>
-              <a>Item 3</a>
-            </li>
+            <li onClick={() => dispatch(handleCompleted(null))}>All</li>
+            <li onClick={() => dispatch(handleCompleted(false))}>Active</li>
+            <li onClick={() => dispatch(handleCompleted(true))}>Completed</li>
           </ul>
         </div>
         <Link to="/" className="font-bold ml-2 normal-case text-xl">
@@ -49,17 +55,31 @@ const Navbar = () => {
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
-          <li className="mx-2">
-            <Link to="/add-task">Add Task</Link>
+          <li
+            className={`mx-2 cursor-pointer font-semibold ${completed === null && "text-orange-400"}`}
+            onClick={() => dispatch(handleCompleted(null))}
+          >
+            All
           </li>
-          <li>
-            <a>Item 3</a>
+          <li
+            className={`mx-2 cursor-pointer font-semibold ${completed === false && "text-orange-400"}`}
+            onClick={() => dispatch(handleCompleted(false))}
+          >
+            Active
+          </li>
+          <li
+            className={`mx-2 cursor-pointer font-semibold ${completed === true && "text-orange-400"}`}
+            onClick={() => dispatch(handleCompleted(true))}
+          >
+            Completed
           </li>
         </ul>
       </div>
       <div className="navbar-end">
         <div className="form-control">
           <input
+            defaultValue={searchText}
+            onChange={(e) => handleSearch(e)}
             type="text"
             placeholder="Search"
             className="input input-info focus:outline-none text-black"
@@ -78,8 +98,13 @@ const Navbar = () => {
             tabIndex={0}
             className="mt-3 p-2 shadow-lg menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
           >
+            <li className="text-black">
+              <Link to="add-task">Add Task</Link>
+            </li>
             <li>
-              <button onClick={logout} className="text-black">Logout</button>
+              <button onClick={logout} className="text-black">
+                Logout
+              </button>
             </li>
           </ul>
         </div>

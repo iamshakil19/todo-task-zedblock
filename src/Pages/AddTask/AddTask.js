@@ -96,8 +96,8 @@ const AddTask = () => {
                     message: "Description is required",
                   },
                   maxLength: {
-                    value: 250,
-                    message: "Maximum 250 characters",
+                    value: 256,
+                    message: "Maximum 256 characters",
                   },
                 })}
               />

@@ -43,6 +43,13 @@ export const taskApi = apiSlice.injectEndpoints({
         method: "DELETE",
       }),
     }),
+    editCompleted: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/api/v1/tasks/completed/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -52,4 +59,5 @@ export const {
   useGetSingleTaskQuery,
   useDeleteTaskMutation,
   useEditTaskMutation,
+  useEditCompletedMutation,
 } = taskApi;
