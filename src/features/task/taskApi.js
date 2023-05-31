@@ -31,17 +31,61 @@ export const taskApi = apiSlice.injectEndpoints({
       },
     }),
     editTask: builder.mutation({
-      query: ({ id, data }) => ({
+      query: ({ id, data, email }) => ({
         url: `/api/v1/tasks/${id}`,
         method: "PATCH",
         body: data,
       }),
+      async onQueryStarted(arg, { dispatch, getState, queryFulfilled }) {
+        try {
+          const result = await queryFulfilled;
+          if (result?.data?.data?.modifiedCount > 0) {
+            dispatch(
+              apiSlice.util.updateQueryData("getMyTask", arg.email, (draft) => {
+                const updatedTask = draft?.data?.find(
+                  (task) => task._id == arg.id
+                );
+
+                if (updatedTask) {
+                  updatedTask.title = arg.data.title;
+                  updatedTask.description = arg.data.description;
+                }
+              })
+            );
+            dispatch(
+              apiSlice.util.updateQueryData("getSingleTask", arg.id, (draft) =>
+                {
+                  draft.data.title = arg.data.title;
+                  draft.data.description = arg.data.description;
+                }
+              )
+            );
+          }
+        } catch (error) {}
+      },
     }),
     deleteTask: builder.mutation({
-      query: (id) => ({
+      query: ({ id, email }) => ({
         url: `/api/v1/tasks/${id}`,
         method: "DELETE",
       }),
+      async onQueryStarted(arg, { dispatch, getState, queryFulfilled }) {
+        try {
+          console.log(arg);
+          await queryFulfilled;
+          dispatch(
+            apiSlice.util.updateQueryData("getMyTask", arg.email, (draft) =>
+              // console.log(JSON.parse(JSON.stringify(draft)))
+              {
+                return {
+                  ...draft,
+                  data: draft.data.filter((task) => task._id !== arg.id),
+                };
+              }
+            )
+          );
+        } catch (error) {}
+      },
     }),
     editCompleted: builder.mutation({
       query: ({ id, data }) => ({

@@ -6,18 +6,18 @@ import {
 } from "../../features/task/taskApi";
 import { toast } from "react-hot-toast";
 import { MdOutlineDelete, MdModeEdit } from "react-icons/md";
+import { useSelector } from "react-redux";
 const TaskDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data: task, isLoading, isError, error } = useGetSingleTaskQuery(id);
   const { title, description, completed } = task?.data || {};
-
+  const { user } = useSelector((state) => state.auth) || {};
+  const { email } = user || {};
   const [deleteTask, { isSuccess }] = useDeleteTaskMutation();
-
   const handleDelete = () => {
-    deleteTask(id);
+    deleteTask({ id, email });
   };
-
   useEffect(() => {
     if (isSuccess) {
       toast.success("Successfully deleted");
@@ -26,7 +26,6 @@ const TaskDetails = () => {
   }, [isSuccess, navigate]);
 
   let content = null;
-
   if (isLoading) {
     content = <div className="text-center mt-10">Loading...</div>;
   } else if (!isLoading && isError) {

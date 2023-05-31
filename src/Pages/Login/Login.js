@@ -53,6 +53,7 @@ const Login = () => {
                 },
               })}
             />
+            <span className="text-sm block">Email: demo@gmail.com</span>
             {errors.email && (
               <span className="label-text-alt text-red-500 text-sm">
                 {errors.email.message}
@@ -84,6 +85,7 @@ const Login = () => {
                 })}
               />
             </div>
+            <span className="text-sm block">Password: Demo2@</span>
             {errors.password && (
               <span className="label-text-alt text-red-500 text-sm">
                 {errors.password.message}

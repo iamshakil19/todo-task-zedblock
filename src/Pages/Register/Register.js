@@ -9,13 +9,9 @@ const Register = () => {
     formState: { errors },
     handleSubmit,
     reset,
-    getValues,
-    watch,
-    control,
   } = useForm();
 
   const [registration, { data, isLoading, error }] = useRegistrationMutation();
-console.log(error, 18);
   useEffect(() => {
     if (error?.data?.error?.keyPattern?.email === 1) {
       toast.error("Email is already in use", { id: "registration" });

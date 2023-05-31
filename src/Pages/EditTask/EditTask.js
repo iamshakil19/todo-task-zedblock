@@ -6,10 +6,13 @@ import {
 } from "../../features/task/taskApi";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 const EditTask = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth) || {};
+  const { email } = user || {};
   const {
     register,
     formState: { errors },
@@ -23,7 +26,7 @@ const EditTask = () => {
   const { title, description, completed } = task?.data || {};
 
   const onSubmit = (data) => {
-    editTask({ id, data });
+    editTask({ id, data, email });
   };
 
   useEffect(() => {
