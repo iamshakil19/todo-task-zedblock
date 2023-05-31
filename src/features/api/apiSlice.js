@@ -19,7 +19,6 @@ export const apiSlice = createApi({
     if (result?.error?.status === 403) {
       api.dispatch(userLoggedOut());
       localStorage.removeItem("auth");
-      toast.error("You are not authorized to access this");
     }
 
     return result;

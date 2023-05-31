@@ -40,7 +40,7 @@ console.log(error, 18);
             <h3 className="poppins text-lg font-semibold mb-2">Name</h3>
             <input
               placeholder="Type your name"
-              type="name"
+              type="text"
               className={`border w-full outline-none  py-2 px-3 ${
                 errors.name
                   ? " border-red-500 focus:border-red-500"
@@ -121,7 +121,7 @@ console.log(error, 18);
             )}
           </div>
           <input
-            // disabled={isLoading}
+            disabled={isLoading}
             className="bg-black text-white mt-7 w-full py-2 text-lg poppins font-semibold cursor-pointer uppercase disabled:bg-gray-300 disabled:cursor-not-allowed"
             type="submit"
             value="Sign up"
